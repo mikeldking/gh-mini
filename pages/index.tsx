@@ -8,6 +8,7 @@ import throttle from "lodash.throttle";
 import OrgImage from "../components/OrgImage";
 import Spinner from "../components/Spinner";
 import ErrorAlert from "../components/ErrorAlert";
+import Empty from "../components/Empty";
 import { SearchIcon } from "@primer/octicons-v2-react";
 
 // Queries
@@ -18,7 +19,6 @@ import {
   SearchOrgsQueryVariables,
   SearchOrgsQuery_search_nodes_Organization as Organization,
 } from "../queries/types/SearchOrgsQuery";
-import Empty from "../components/Empty";
 
 /**
  * Renders the home page with organization search to navigate to the org details page
