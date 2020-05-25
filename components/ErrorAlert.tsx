@@ -1,6 +1,9 @@
 import React from "react";
 import { ApolloError } from "apollo-client";
 
+/**
+ * Render an error in an alert
+ */
 const ErrorAlert = ({
   error,
   className = "",
@@ -8,7 +11,6 @@ const ErrorAlert = ({
   error: Error | ApolloError;
   className?: string;
 }) => {
-  console.dir(error);
   return (
     <div
       className={`${className} bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative`}

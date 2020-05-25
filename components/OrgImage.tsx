@@ -10,6 +10,7 @@ const OrgImage = ({ avatarUrl }: { avatarUrl: string }) => {
     <img
       src={avatarUrl}
       className="object-contain h-10 w-10 rounded-lg border shadow-md bg-white"
+      alt="organization image"
     />
   );
 };
