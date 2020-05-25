@@ -1,0 +1,16 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+/* purgecss start ignore */
+@tailwind base;
+@tailwind components;
+/* purgecss end ignore */
+@tailwind utilities;
+
+body {
+  @apply bg-gray-300;
+}
+
+.card {
+  @apply rounded-lg bg-white shadow-lg mb-4 border-gray-400;
+}
