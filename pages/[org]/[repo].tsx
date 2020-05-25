@@ -12,6 +12,9 @@ import {
   RepoQuery_repository_defaultBranchRef_target_Commit as DefaultBranchRefTargetCommit,
 } from "../../queries/types/RepoQuery";
 
+/**
+ * Renders a repo with the most recent commits to that repo
+ */
 const Repo = () => {
   const {
     query: { org, repo },
@@ -36,7 +39,6 @@ const Repo = () => {
           /{repo}
         </h1>
         {error ? <ErrorAlert error={error} className="mb-2" /> : null}
-
         <section className="flex flex-col items-center">
           <h2 className="font-medium text-gray-700 w-full">{`Recent commits ${
             data ? "to " + data.repository.defaultBranchRef.name : ""
