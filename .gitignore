@@ -31,3 +31,4 @@ yarn-error.log*
 
 # Config files
 apollo.config.js
+next.config.js
