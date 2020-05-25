@@ -16,7 +16,7 @@ export default function createApolloClient(initialState, ctx) {
     link: new HttpLink({
       uri: "https://api.github.com/graphql",
       headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_GH_ACCESS_TOKEN}`,
+        Authorization: `Bearer ${process.env.GH_ACCESS_TOKEN}`,
       },
     }),
     cache: new InMemoryCache().restore(initialState),

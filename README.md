@@ -26,7 +26,7 @@ Create a file named `next.config.js` at the root of this repo. Then, fill it out
 ```javascript
 module.exports = {
   env: {
-    NEXT_PUBLIC_GH_ACCESS_TOKEN: "<your-token-goes-here>",
+    GH_ACCESS_TOKEN: "<your-token-goes-here>",
   },
 };
 ```
