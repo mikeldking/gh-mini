@@ -3,15 +3,23 @@ import { MarkGithubIcon } from "@primer/octicons-v2-react";
 import "../styles/index.css";
 import Link from "next/link";
 
+/**
+ * Provide a consistent layout to all pages
+ */
 function App({ Component, pageProps }) {
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="text-center text-gray-300 bg-gray-700 py-3">
-        <Link href="/">
-          <a>
-            <MarkGithubIcon size="medium" />
-          </a>
-        </Link>
+      <header
+        className="text-center text-gray-300 bg-gray-700 py-3"
+        role="banner"
+      >
+        <nav>
+          <Link href="/">
+            <a>
+              <MarkGithubIcon size="medium" />
+            </a>
+          </Link>
+        </nav>
       </header>
       <div className="flex-auto">
         <Component {...pageProps} />

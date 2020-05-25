@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { withApollo } from "../lib/apollo";
-import throttle from "lodash.throttle";
 
 // Components
 import OrgImage from "../components/OrgImage";
 import Spinner from "../components/Spinner";
 import ErrorAlert from "../components/ErrorAlert";
+import Empty from "../components/Empty";
 import { SearchIcon } from "@primer/octicons-v2-react";
+
+// Hooks
+import useDebounce from "../hooks/useDebounce";
 
 // Queries
 import { useQuery } from "@apollo/react-hooks";
@@ -18,25 +21,24 @@ import {
   SearchOrgsQueryVariables,
   SearchOrgsQuery_search_nodes_Organization as Organization,
 } from "../queries/types/SearchOrgsQuery";
-import Empty from "../components/Empty";
 
 /**
  * Renders the home page with organization search to navigate to the org details page
  */
 const Home = () => {
   const [query, setQuery] = useState<string>("");
+  const debouncedQuery = useDebounce<string>(query, 200); // debounce the search by 200ms
+
+  // Search for orgs using the debounced query
   const { data, loading, error } = useQuery<
     SearchOrgsQuery,
     SearchOrgsQueryVariables
   >(searchOrgsQuery, {
     variables: {
-      query: `${query} type:org`, // Account for GitHub's query syntax for orgs
+      query: `${debouncedQuery} type:org`, // Account for GitHub's query syntax for orgs
     },
-    skip: query.length < 1,
+    skip: debouncedQuery.length < 1,
   });
-  const onInputChange = throttle(
-    (event) => (setQuery(event.target.value), 250)
-  );
 
   return (
     <div>
@@ -55,8 +57,7 @@ const Home = () => {
               )}
             </div>
             <input
-              value={query}
-              onChange={onInputChange}
+              onChange={(event) => setQuery(event.target.value)}
               type="search"
               className="transition-colors shadow duration-100 ease-in-out focus:outline-0 border border-transparent focus:bg-white focus:border-gray-300 placeholder-gray-600 rounded-lg bg-gray-200 py-2 pr-4 pl-12 block text-xl w-full appearance-none leading-normal ds-input"
               placeholder="Search Organizations"
