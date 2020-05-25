@@ -77,7 +77,7 @@ const Home = () => {
                 <ul>
                   {data.search.nodes.map((org: Organization, index) => (
                     <li key={index}>
-                      <Link href="[slug]" as={`/${otrg.login}`}>
+                      <Link href="[slug]" as={`/${org.login}`}>
                         <a className="flex items-center rounded-lg bg-white shadow-lg mb-4 border-gray-400 py-4 px-6">
                           <OrgImage avatarUrl={org.avatarUrl} />
                           <span className="text-gray-600 font-thin ml-4 text-2xl">
