@@ -28,3 +28,7 @@ yarn-error.log*
 # Environment Variables
 .env
 .env.build
+
+# Config files
+apollo.config.js
+next.config.js
