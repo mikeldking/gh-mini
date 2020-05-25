@@ -16,15 +16,22 @@ import {
  * Renders a repo with the most recent commits to that repo
  */
 const Repo = () => {
-  const {
+  let {
     query: { org, repo },
   } = useRouter();
+
+  // The next.js router thinks multiple values can be passed in. Fix by just picking the first value
+  org = Array.isArray(org) ? org[0] : org;
+  repo = Array.isArray(repo) ? repo[0] : repo;
+
+  // Query for the repo with the top N commits
   const { data, loading, error } = useQuery<RepoQuery, RepoQueryVariables>(
     repoQuery,
     {
-      variables: { org: org as string, repo: repo as string },
+      variables: { org: org, repo: repo },
     }
   );
+
   return (
     <div>
       <Head>

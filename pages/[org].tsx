@@ -18,14 +18,19 @@ import { OrgQuery, OrgQueryVariables } from "../queries/types/OrgQuery";
  * The organization details page with repositories sorted by stargazers
  */
 const Org = () => {
-  const {
+  let {
     query: { org },
   } = useRouter();
+
+  // Work around next.js query type
+  org = Array.isArray(org) ? org[0] : org;
+
+  // Query for the org and its repositories
   const { data, loading, error, fetchMore } = useQuery<
     OrgQuery,
     OrgQueryVariables
   >(orgQuery, {
-    variables: { login: org as string },
+    variables: { login: org },
   });
 
   // Pagination handler using the pageInfo cursor
@@ -36,12 +41,11 @@ const Org = () => {
         login: org as string,
         reposCursor: data?.organization.repositories.pageInfo.endCursor,
       },
-      updateQuery: (
-        previousResult: OrgQuery,
-        { fetchMoreResult }: { fetchMoreResult: OrgQuery }
-      ): OrgQuery => {
+      updateQuery: (previousResult, { fetchMoreResult }) => {
         const newEdges = fetchMoreResult.organization.repositories.edges;
         const pageInfo = fetchMoreResult.organization.repositories.pageInfo;
+
+        // If there are new edges, interleave the new edges and pageInfo
         return newEdges.length
           ? {
               organization: {
@@ -81,39 +85,40 @@ const Org = () => {
             </h2>
             <span className="text-gray-500">Ordered by stargazers</span>
           </header>
-          <ul className="pt-4 w-full">
-            {data?.organization.repositories.edges.map(({ node: repo }) => {
-              return (
-                <li key={repo.id}>
-                  <Link href="[org]/[repo]" as={`/${repo.nameWithOwner}`}>
-                    <a className="card flex flex-col divide-y divide-gray-400 hover:shadow-2xl">
-                      <div className="py-4 px-6">
-                        <h3 className="flex text-gray-800 text-2xl">
-                          {repo.name}
-                        </h3>
-                        {repo.description ? (
-                          <h4 className="text-gray-600 text-sm leading-snug pt-2">
-                            {repo.description}
-                          </h4>
-                        ) : null}
-                      </div>
-                      <div className="flex justify-end px-6 py-2 text-gray-600 font-thin">
-                        <span className="flex items-center mr-3">
-                          <GitForkIcon className="mr-1" />
-                          {repo.forkCount}
-                        </span>
-
-                        <span className="flex items-center">
-                          <StarFillIcon className="mr-1" />
-                          {repo.stargazers.totalCount}
-                        </span>
-                      </div>
-                    </a>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          {data ? (
+            <ul className="pt-4 w-full">
+              {data.organization.repositories.edges.map(({ node: repo }) => {
+                return (
+                  <li key={repo.id}>
+                    <Link href="[org]/[repo]" as={`/${repo.nameWithOwner}`}>
+                      <a className="card flex flex-col divide-y divide-gray-400 hover:shadow-2xl">
+                        <div className="py-4 px-6">
+                          <h3 className="flex text-gray-800 text-2xl">
+                            {repo.name}
+                          </h3>
+                          {repo.description ? (
+                            <h4 className="text-gray-600 text-sm leading-snug pt-2">
+                              {repo.description}
+                            </h4>
+                          ) : null}
+                        </div>
+                        <div className="flex justify-end px-6 py-2 text-gray-600 font-thin">
+                          <span className="flex items-center mr-3">
+                            <GitForkIcon className="mr-1" />
+                            {repo.forkCount}
+                          </span>
+                          <span className="flex items-center">
+                            <StarFillIcon className="mr-1" />
+                            {repo.stargazers.totalCount}
+                          </span>
+                        </div>
+                      </a>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : null}
           {data?.organization.repositories.pageInfo.hasNextPage ? (
             <button
               key="load-more"
