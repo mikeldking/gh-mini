@@ -1,5 +1,5 @@
 module.exports = {
   env: {
-    ghAccessToken: "8ff46c88b5f8e3ae272caa96d5548f9387140629",
+    GH_ACCESS_TOKEN: "4a692a5e775216ee5e4fa8c35a426c2df4d83a5a", // This is a read only token so it is committed here
   },
 };
