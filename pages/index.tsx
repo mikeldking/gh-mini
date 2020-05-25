@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { withApollo } from "../lib/apollo";
-import throttle from "lodash.throttle";
 
 // Components
 import OrgImage from "../components/OrgImage";
@@ -21,22 +20,49 @@ import {
 } from "../queries/types/SearchOrgsQuery";
 
 /**
+ * hook to debounce the input
+ * @param value
+ * @param delay
+ */
+function useDebounce<ValueType>(value: ValueType, delay: number) {
+  // State and setters for debounced value
+  const [debouncedValue, setDebouncedValue] = useState<ValueType>(value);
+
+  useEffect(
+    () => {
+      // Set debouncedValue to value (passed in) after the specified delay
+      const handler = setTimeout(() => {
+        setDebouncedValue(value);
+      }, delay);
+
+      // Return a cleanup function that will be called every time
+      return () => {
+        clearTimeout(handler);
+      };
+    },
+    // Only re-call effect if value changes
+    [value]
+  );
+
+  return debouncedValue;
+}
+/**
  * Renders the home page with organization search to navigate to the org details page
  */
 const Home = () => {
   const [query, setQuery] = useState<string>("");
+  const debouncedQuery = useDebounce(query, 200); // debounce the search by 200ms
+
+  // Search for orgs using the debounced query
   const { data, loading, error } = useQuery<
     SearchOrgsQuery,
     SearchOrgsQueryVariables
   >(searchOrgsQuery, {
     variables: {
-      query: `${query} type:org`, // Account for GitHub's query syntax for orgs
+      query: `${debouncedQuery} type:org`, // Account for GitHub's query syntax for orgs
     },
-    skip: query.length < 1,
+    skip: debouncedQuery.length < 1,
   });
-  const onInputChange = throttle(
-    (event) => (setQuery(event.target.value), 250)
-  );
 
   return (
     <div>
@@ -55,8 +81,7 @@ const Home = () => {
               )}
             </div>
             <input
-              value={query}
-              onChange={onInputChange}
+              onChange={(event) => setQuery(event.target.value)}
               type="search"
               className="transition-colors shadow duration-100 ease-in-out focus:outline-0 border border-transparent focus:bg-white focus:border-gray-300 placeholder-gray-600 rounded-lg bg-gray-200 py-2 pr-4 pl-12 block text-xl w-full appearance-none leading-normal ds-input"
               placeholder="Search Organizations"
