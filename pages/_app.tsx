@@ -3,10 +3,17 @@ import { MarkGithubIcon } from "@primer/octicons-v2-react";
 import "../styles/index.css";
 import Link from "next/link";
 
+interface IProps {
+  Component: React.ElementType<any>;
+  pageProps: any;
+}
 /**
  * Provide a consistent layout to all pages
  */
-function App({ Component, pageProps }) {
+const App: React.FunctionComponent<IProps> = ({
+  Component,
+  pageProps,
+}: IProps) => {
   return (
     <div className="min-h-screen flex flex-col">
       <header
@@ -31,6 +38,6 @@ function App({ Component, pageProps }) {
       </footer>
     </div>
   );
-}
+};
 
 export default App;

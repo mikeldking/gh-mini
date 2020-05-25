@@ -29,6 +29,7 @@ const Home = () => {
   const [query, setQuery] = useState<string>("");
   const debouncedQuery = useDebounce<string>(query, 200); // debounce the search by 200ms
 
+  console.log(`${query} ${debouncedQuery}`);
   // Search for orgs using the debounced query
   const { data, loading, error } = useQuery<
     SearchOrgsQuery,

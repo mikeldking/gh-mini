@@ -1,3 +1,4 @@
+import React from "react";
 import { ApolloClient } from "apollo-client";
 import { NormalizedCacheObject } from "apollo-cache-inmemory";
 import Head from "next/head";
@@ -71,7 +72,14 @@ const initApolloClient = (initialState, ctx) => {
 export const withApollo = ({ ssr = false }: { ssr?: boolean }) => (
   PageComponent
 ) => {
-  const WithApollo = ({ apolloClient, apolloState, ...pageProps }) => {
+  const WithApollo = ({
+    apolloClient,
+    apolloState,
+    ...pageProps
+  }: {
+    apolloClient: ApolloClient<NormalizedCacheObject>;
+    apolloState: NormalizedCacheObject;
+  }) => {
     let client;
     if (apolloClient) {
       // Happens on: getDataFromTree & next.js ssr
