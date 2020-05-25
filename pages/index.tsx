@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { withApollo } from "../lib/apollo";
@@ -10,6 +10,9 @@ import ErrorAlert from "../components/ErrorAlert";
 import Empty from "../components/Empty";
 import { SearchIcon } from "@primer/octicons-v2-react";
 
+// Hooks
+import useDebounce from "../hooks/useDebounce";
+
 // Queries
 import { useQuery } from "@apollo/react-hooks";
 import searchOrgsQuery from "../queries/searchOrgsQuery";
@@ -20,38 +23,11 @@ import {
 } from "../queries/types/SearchOrgsQuery";
 
 /**
- * hook to debounce the input
- * @param value
- * @param delay
- */
-function useDebounce<ValueType>(value: ValueType, delay: number) {
-  // State and setters for debounced value
-  const [debouncedValue, setDebouncedValue] = useState<ValueType>(value);
-
-  useEffect(
-    () => {
-      // Set debouncedValue to value (passed in) after the specified delay
-      const handler = setTimeout(() => {
-        setDebouncedValue(value);
-      }, delay);
-
-      // Return a cleanup function that will be called every time
-      return () => {
-        clearTimeout(handler);
-      };
-    },
-    // Only re-call effect if value changes
-    [value]
-  );
-
-  return debouncedValue;
-}
-/**
  * Renders the home page with organization search to navigate to the org details page
  */
 const Home = () => {
   const [query, setQuery] = useState<string>("");
-  const debouncedQuery = useDebounce(query, 200); // debounce the search by 200ms
+  const debouncedQuery = useDebounce<string>(query, 200); // debounce the search by 200ms
 
   // Search for orgs using the debounced query
   const { data, loading, error } = useQuery<
