@@ -29,6 +29,7 @@ const Home = () => {
   const [query, setQuery] = useState<string>("");
   const debouncedQuery = useDebounce<string>(query, 200); // debounce the search by 200ms
 
+  console.log(`${query} ${debouncedQuery}`);
   // Search for orgs using the debounced query
   const { data, loading, error } = useQuery<
     SearchOrgsQuery,
@@ -76,7 +77,7 @@ const Home = () => {
                 <ul>
                   {data.search.nodes.map((org: Organization, index) => (
                     <li key={index}>
-                      <Link href="[slug]" as={`/${org.login}`}>
+                      <Link href="[slug]" as={`/${otrg.login}`}>
                         <a className="flex items-center rounded-lg bg-white shadow-lg mb-4 border-gray-400 py-4 px-6">
                           <OrgImage avatarUrl={org.avatarUrl} />
                           <span className="text-gray-600 font-thin ml-4 text-2xl">
