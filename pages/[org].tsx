@@ -65,6 +65,17 @@ const Org = () => {
     });
   };
 
+  // If there is an error, simply display it
+  // TODO: handle graphql "404s"
+  if (error) {
+    return (
+      <ErrorAlert
+        error={error}
+        className="mb-2 max-w-xl my-5 text-center mx-auto"
+      />
+    );
+  }
+
   return (
     <div>
       <Head>
@@ -76,7 +87,6 @@ const Org = () => {
           <OrgImage avatarUrl={data?.organization.avatarUrl} />
           <span className="ml-4">{data ? data.organization.name : org}</span>
         </h1>
-        {error ? <ErrorAlert error={error} className="mb-2" /> : null}
         <section className="flex flex-col items-center">
           <header className="flex justify-between w-full">
             <h2 className="font-medium text-gray-700">

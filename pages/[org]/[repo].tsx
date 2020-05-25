@@ -32,6 +32,14 @@ const Repo = () => {
     }
   );
 
+  // If there is an error, simply display it
+  // TODO: handle graphql "404s"
+  if (error) {
+    return (
+      <ErrorAlert error={error} className="max-w-xl my-5 text-center mx-auto" />
+    );
+  }
+
   return (
     <div>
       <Head>
@@ -45,7 +53,6 @@ const Repo = () => {
           </Link>
           /{repo}
         </h1>
-        {error ? <ErrorAlert error={error} className="mb-2" /> : null}
         <section className="flex flex-col items-center">
           <h2 className="font-medium text-gray-700 w-full">{`Recent commits ${
             data ? "to " + data.repository.defaultBranchRef.name : ""
